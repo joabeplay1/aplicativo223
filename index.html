@@ -3,199 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle Universal Gamer Bluetooth - Simulação</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>NeoArcade - Fliperama Premium</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <div class="sidebar">
-            <div class="sidebar-logo">
-                GAMER<br><span>CONTROL</span>
-            </div>
-            <nav class="nav-menu">
-                <a href="#" class="nav-item active" data-target="home"><i class="fas fa-home"></i> Início</a>
-                <a href="#" class="nav-item" data-target="modes"><i class="fas fa-gamepad"></i> Modos</a>
-                <a href="#" class="nav-item" data-target="settings"><i class="fas fa-cog"></i> Configurações</a>
-                <a href="#" class="nav-item" data-target="profile"><i class="fas fa-user"></i> Perfil</a>
-                <a href="#" class="nav-item" data-target="about"><i class="fas fa-info-circle"></i> Sobre</a>
+    <div id="splash-screen">
+        <div class="splash-logo">NEOARCADE</div>
+        <div class="splash-subtitle">A Experiência Arcade Definitiva</div>
+        <div class="loading-bar"><div class="loading-progress"></div></div>
+    </div>
+
+    <div class="container hidden" id="main-app">
+        <header class="header">
+            <div class="header-title">NEOARCADE</div>
+            <nav class="header-nav">
+                <button onclick="showScreen('home')">Início</button>
+                <button onclick="showScreen('romImport')">Importar ROMs</button>
+                <button onclick="showScreen('settings')">Configurações</button>
             </nav>
+        </header>
+
+        <main class="main-content">
+            <aside class="sidebar">
+                <div class="sidebar-menu-item active" data-screen="home">Todos os Jogos</div>
+                <div class="sidebar-menu-item" data-category="Neo Geo">Neo Geo</div>
+                <div class="sidebar-menu-item" data-category="MAME Arcade">MAME Arcade</div>
+                <div class="sidebar-menu-item" data-category="CPS1">CPS1</div>
+                <div class="sidebar-menu-item" data-category="CPS2">CPS2</div>
+                <div class="sidebar-menu-item" data-category="CPS3">CPS3</div>
+                <div class="sidebar-menu-item" data-category="Sega Arcade">Sega Arcade</div>
+                <div class="sidebar-menu-item" data-category="FinalBurn Alpha">FinalBurn Alpha</div>
+                <div class="sidebar-menu-item" data-category="PlayStation 1">PlayStation 1</div>
+                <div class="sidebar-menu-item" data-category="Favorites">Favoritos</div>
+                <div class="sidebar-menu-item" data-category="History">Histórico</div>
+            </aside>
+
+            <section class="game-list-area" id="home-screen">
+                <div class="search-bar">
+                    <input type="text" id="game-search" placeholder="Buscar jogos...">
+                    <button onclick="searchGames()">Buscar</button>
+                    <button onclick="autoDownloadCovers()">Baixar Capas</button>
+                </div>
+                <div class="game-grid" id="game-grid">
+                    </div>
+            </section>
+        </main>
+
+        <div id="game-play-screen">
+            <div class="game-display">
+                <p id="playing-game-title">Carregando Jogo...</p>
+            </div>
+            <div class="game-controls">
+                <button onclick="simulateSaveState()">Save State</button>
+                <button onclick="simulateLoadState()">Load State</button>
+                <button onclick="toggleTurboMode()">Turbo</button>
+                <button onclick="toggleShader()">Shader CRT</button>
+                <button class="exit" onclick="exitGame()">Sair do Jogo</button>
+            </div>
         </div>
 
-        <div class="main-content">
-            <div class="top-bar">
-                <h1>Painel de Controle</h1>
-                
-                <div class="action-log" id="action-log" style="color: var(--neon-blue); font-family: 'Orbitron', sans-serif; font-size: 0.9em; background: rgba(0, 240, 255, 0.1); padding: 5px 15px; border-radius: 5px; border: 1px solid var(--neon-blue); text-shadow: var(--glow-intensity);">
-                    Aguardando comando...
-                </div>
+        <div id="settings-screen">
+            <h2 class="settings-title">Configurações</h2>
 
-                <div class="status-indicators">
-                    <div class="status-item disconnected" id="bluetooth-status">
-                        <i class="fab fa-bluetooth-b"></i> Bluetooth: Desconectado
-                    </div>
-                    <div class="status-item">
-                        <i class="fas fa-battery-full battery-icon"></i> 95%
-                    </div>
+            <div class="settings-section">
+                <h3>Gráficos e Emulação</h3>
+                <div class="setting-item">
+                    <label for="fps-display">Mostrar FPS</label>
+                    <input type="checkbox" id="fps-display" checked>
+                </div>
+                <div class="setting-item">
+                    <label for="hd-filter">Filtro HD</label>
+                    <input type="checkbox" id="hd-filter">
+                </div>
+                <div class="setting-item">
+                    <label for="crt-shader">Shader CRT Retrô</label>
+                    <input type="checkbox" id="crt-shader" checked>
+                </div>
+                <div class="setting-item">
+                    <label for="anti-lag">Sistema Anti-Lag</label>
+                    <input type="checkbox" id="anti-lag" checked>
+                </div>
+                <div class="setting-item">
+                    <label for="resolution">Resolução</label>
+                    <select id="resolution">
+                        <option value="auto">Automático</option>
+                        <option value="720p">1280x720 (HD)</option>
+                        <option value="1080p">1920x1080 (Full HD)</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="content-area">
-                <div id="home" class="home-screen active">
-                    <h2>Bem-vindo ao Controle Universal Gamer</h2>
-                    <p>Transforme seu dispositivo em um controle gamer de última geração.</p>
-                    <button class="connect-button" id="connect-bluetooth">
-                        <i class="fab fa-bluetooth-b"></i> Conectar Bluetooth
-                    </button>
+            <div class="settings-section">
+                <h3>Controles</h3>
+                <div class="setting-item">
+                    <label for="auto-detect-controller">Detectar Controle Automaticamente</label>
+                    <input type="checkbox" id="auto-detect-controller" checked>
                 </div>
-
-                <div id="modes" class="modes-screen">
-                    <div class="mode-card" data-mode="ps5">
-                        <i class="fab fa-playstation"></i>
-                        <h3>PS5</h3>
-                    </div>
-                    <div class="mode-card" data-mode="ps4">
-                        <i class="fab fa-playstation"></i>
-                        <h3>PS4</h3>
-                    </div>
-                    <div class="mode-card" data-mode="ps3">
-                        <i class="fab fa-playstation"></i>
-                        <h3>PS3</h3>
-                    </div>
-                    <div class="mode-card" data-mode="ps2">
-                        <i class="fab fa-playstation"></i>
-                        <h3>PS2</h3>
-                    </div>
-                    <div class="mode-card" data-mode="xbox">
-                        <i class="fab fa-xbox"></i>
-                        <h3>Xbox</h3>
-                    </div>
-                    <div class="mode-card" data-mode="retro">
-                        <i class="fas fa-gamepad"></i>
-                        <h3>Retrô</h3>
-                    </div>
-                    <div class="mode-card" data-mode="arcade">
-                        <i class="fas fa-dice-d6"></i>
-                        <h3>Arcade</h3>
-                    </div>
-                    <div class="mode-card" data-mode="volante">
-                        <i class="fas fa-steering-wheel"></i>
-                        <h3>Volante</h3>
-                    </div>
-                    <div class="mode-card" data-mode="fps">
-                        <i class="fas fa-crosshairs"></i>
-                        <h3>FPS</h3>
-                    </div>
-                    <div class="mode-card" data-mode="corrida">
-                        <i class="fas fa-car-side"></i>
-                        <h3>Corrida</h3>
-                    </div>
-
-                    <div class="controller-display">
-                        <div class="controller-layout" data-mode="Nenhum Modo Selecionado">
-                            <p style="color: var(--text-medium); font-size: 1.2em; text-align: center;">Selecione um modo de controle acima.</p>
-                        </div>
-                    </div>
+                <div class="setting-item">
+                    <label for="vibration">Vibração do Controle</label>
+                    <input type="checkbox" id="vibration" checked>
                 </div>
-
-                <div id="settings" class="settings-screen">
-                    <h2>Configurações do Controle</h2>
-                    <div class="setting-item">
-                        <label>Vibração Háptica</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <label>Sensibilidade Analógica</label>
-                        <input type="range" min="1" max="100" value="75" class="slider-range">
-                    </div>
-                    <div class="setting-item">
-                        <label>Modo Turbo</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <label>Mapeamento de Botões</label>
-                        <button>Personalizar</button>
-                    </div>
-                    <div class="setting-item">
-                        <label>Criador de Layouts</label>
-                        <button>Abrir Editor</button>
-                    </div>
-                    <div class="setting-item">
-                        <label>Sistema Anti-Delay</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <label>Otimização IA (Sensibilidade)</label>
-                        <button>Ativar IA</button>
-                    </div>
+                <div class="setting-item">
+                    <label for="latency">Latência (ms)</label>
+                    <input type="range" id="latency" min="0" max="100" value="10">
                 </div>
-
-                <div id="profile" class="profile-screen">
-                    <h2>Perfil Gamer</h2>
-                    <div class="profile-header">
-                        <div class="profile-avatar">
-                            <i class="fas fa-user-astronaut"></i>
-                        </div>
-                        <div class="profile-info">
-                            <h3>Jogador_Alpha</h3>
-                            <p>Membro desde: 2023</p>
-                            <p>Conexões: 124</p>
-                        </div>
-                    </div>
-                    <h3>Estatísticas de Uso</h3>
-                    <div class="profile-stats">
-                        <div class="stat-card">
-                            <h4>250h</h4>
-                            <p>Tempo de Jogo Total</p>
-                        </div>
-                        <div class="stat-card">
-                            <h4>PS5</h4>
-                            <p>Modo Mais Usado</p>
-                        </div>
-                        <div class="stat-card">
-                            <h4>98%</h4>
-                            <p>Precisão Analógica</p>
-                        </div>
-                        <div class="stat-card">
-                            <h4>12</h4>
-                            <p>Layouts Personalizados</p>
-                        </div>
-                    </div>
+                <div class="setting-item">
+                    <label>Configurar Botões</label>
+                    <button class="settings-button" onclick="alert('Simulando configuração de botões...')">Abrir Configuração</button>
                 </div>
+            </div>
 
-                <div id="about" class="about-screen">
-                    <h2>Sobre o Aplicativo</h2>
-                    <p>Este é um projeto de simulação de um Controle Universal Gamer Bluetooth, desenvolvido para demonstrar um conceito de interface de usuário e experiência de controle avançada em um ambiente web.</p>
-                    <p><strong>Recursos Simulados:</strong></p>
-                    <ul>
-                        <li><strong>Controle Virtual Touchscreen:</strong> Interface interativa para simular botões e joysticks.</li>
-                        <li><strong>Modos de Controle:</strong> PS2, PS3, PS4, PS5, Xbox, Retrô, Arcade, Volante, FPS, Corrida.</li>
-                        <li><strong>Design Futurista:</strong> Estilo gamer premium com neon RGB, interface 3D e efeitos holográficos.</li>
-                        <li><strong>Configurações Avançadas:</strong> Sensibilidade ajustável, modo turbo, mapeamento de botões (UI).</li>
-                    </ul>
-                    <p><strong>Limitações da Simulação Web:</strong></p>
-                    <p>É importante notar que, como uma aplicação puramente web (HTML/CSS/JS), este projeto <strong>não pode</strong> implementar as seguintes funcionalidades complexas que exigiriam acesso a hardware de baixo nível, APIs nativas do sistema operacional ou serviços de backend:</p>
-                    <ul>
-                        <li><strong>Conexão Bluetooth/USB OTG Real:</strong> Não há comunicação real com dispositivos externos.</li>
-                        <li><strong>Baixa Latência e Vibração Háptica (Completa):</strong> A vibração é limitada à API `navigator.vibrate` do navegador.</li>
-                        <li><strong>Compatibilidade Direta com Consoles Modernos (PS4/PS5/Xbox Series):</strong> Estes sistemas exigem autenticação e licenciamento oficiais.</li>
-                        <li><strong>Integração com Jogos Android/PC/Nuvem/Emuladores:</strong> Não há envio de comandos reais para jogos.</li>
-                        <li><strong>Macro de Comandos, Salvamento em Nuvem, Multiplayer Local, Assistente Inteligente, IA:</strong> Requerem lógica de backend e/ou APIs de sistema.</li>
-                    </ul>
-                    <p>Este projeto visa oferecer uma experiência visual e interativa que represente o potencial de um aplicativo nativo com tais funcionalidades.</p>
+            <div class="settings-section">
+                <h3>Áudio</h3>
+                <div class="setting-item">
+                    <label for="master-volume">Volume Principal</label>
+                    <input type="range" id="master-volume" min="0" max="100" value="70">
+                </div>
+                <div class="setting-item">
+                    <label for="arcade-music">Música Arcade</label>
+                    <input type="checkbox" id="arcade-music" checked>
+                </div>
+            </div>
+
+            <div class="settings-buttons">
+                <button onclick="saveSettings()">Salvar</button>
+                <button class="cancel" onclick="showScreen('home')">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="rom-import-screen">
+            <h2 class="rom-import-title">Importar ROMs</h2>
+            <div class="rom-import-box">
+                <p>Selecione seus arquivos de ROM (.zip, .7z, .rom, .bin, .iso) para adicionar à biblioteca.</p>
+                <label for="rom-file-input">
+                    Clique ou arraste e solte arquivos aqui
+                    <input type="file" id="rom-file-input" multiple accept=".zip,.7z,.rom,.bin,.iso">
+                </label>
+                <div id="selected-rom-info">Nenhum arquivo selecionado.</div>
+                <div class="rom-import-actions">
+                    <button onclick="processRomFiles()">Processar ROMs</button>
+                    <button class="cancel" onclick="showScreen('home')">Voltar</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <audio id="arcade-select-sound" src="https://www.soundjay.com/buttons/sounds/button-2.mp3" preload="auto"></audio>
+    <audio id="arcade-start-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+    <audio id="arcade-bg-music" src="https://www.soundjay.com/music/sounds/arcade-music-1.mp3" loop preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
