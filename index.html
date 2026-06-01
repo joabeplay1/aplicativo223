@@ -1,192 +1,198 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jesus Reina — Criador de Apps com IA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet"/>
-  <style>* { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jesus Reina</title>
 
-:root {
-  --gold: #C9912A;
-  --gold-light: #F0B93A;
-  --dark: #0A0E1A;
-  --dark-2: #111827;
-  --dark-3: #1A2235;
-  --text: #F5F0E8;
-  --text-muted: #8A96A8;
-  --border: rgba(201,145,42,0.2);
-}
+  <!-- 1. Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--text); overflow-x: hidden; }
+  <!-- 2. Tailwind CSS (Sem precisar instalar nada) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
 
-/* Navbar */
-.navbar { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; background: rgba(10,14,26,0.9); }
-.nav-brand { display: flex; align-items: center; gap: 0.6rem; font-size: 1.25rem; color: var(--text); }
-.nav-brand strong { color: var(--gold); }
-.btn-nav { background: var(--gold); color: #0A0E1A; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem; text-decoration: none; transition: opacity 0.2s; }
-.btn-nav:hover { opacity: 0.85; }
+  <!-- 3. React e Bibliotecas via CDN (Scripts que rodam no navegador) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-router-dom@6.22.3/dist/umd/react-router-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@tanstack/react-query@5.28.4/build/umd/index.production.js"></script>
+  
+  <!-- 4. Babel (Para o navegador entender a sintaxe JSX do React sem o Node) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-/* Hero */
-.hero { position: relative; min-height: 90vh; display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; text-align: center; overflow: hidden; }
-.hero-glow { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,145,42,0.12) 0%, transparent 70%); pointer-events: none; }
-.hero-content { position: relative; z-index: 1; max-width: 760px; }
-.hero-badge { display: inline-block; background: rgba(201,145,42,0.15); border: 1px solid var(--border); color: var(--gold-light); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
-.hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.25rem; }
-.gradient-text { background: linear-gradient(135deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero-desc { font-size: 1.125rem; color: var(--text-muted); max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.7; }
-.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
-.btn-primary { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: #0A0E1A; padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; display: inline-block; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,145,42,0.35); }
-.btn-primary.btn-lg { padding: 1rem 2.5rem; font-size: 1.1rem; }
-.btn-outline { border: 1px solid var(--border); color: var(--text); padding: 0.875rem 2rem; border-radius: 12px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
-.btn-outline:hover { border-color: var(--gold); background: rgba(201,145,42,0.08); }
-.hero-stats { display: flex; align-items: center; justify-content: center; gap: 2rem; }
-.stat { display: flex; flex-direction: column; align-items: center; }
-.stat strong { font-size: 1.5rem; font-weight: 800; color: var(--gold-light); }
-.stat span { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
-.stat-sep { width: 1px; height: 40px; background: var(--border); }
-
-/* Features */
-.features { padding: 6rem 2rem; background: var(--dark-2); }
-.section-title { text-align: center; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.75rem; }
-.section-sub { text-align: center; color: var(--text-muted); margin-bottom: 3rem; font-size: 1.05rem; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
-.feature-card { background: var(--dark-3); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: border-color 0.3s, transform 0.3s; }
-.feature-card:hover { border-color: var(--gold); transform: translateY(-4px); }
-.feature-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-.feature-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--gold-light); }
-.feature-card p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
-
-/* Types */
-.types { padding: 5rem 2rem; }
-.types-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; max-width: 700px; margin: 0 auto; }
-.type-pill { background: var(--dark-3); border: 1px solid var(--border); padding: 0.6rem 1.2rem; border-radius: 999px; font-size: 0.9rem; font-weight: 500; transition: border-color 0.2s, background 0.2s; cursor: default; }
-.type-pill:hover { border-color: var(--gold); background: rgba(201,145,42,0.08); }
-
-/* CTA */
-.cta { padding: 5rem 2rem; }
-.cta-card { background: linear-gradient(135deg, var(--dark-3), rgba(201,145,42,0.08)); border: 1px solid var(--border); border-radius: 24px; padding: 4rem 2rem; text-align: center; max-width: 600px; margin: 0 auto; }
-.cta-card h2 { font-size: 2rem; font-weight: 800; margin-bottom: 0.75rem; }
-.cta-card p { color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem; }
-
-/* Footer */
-.footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.875rem; }
-
-@media (max-width: 600px) {
-  .navbar { padding: 1rem; }
-  .hero-stats { gap: 1rem; }
-  .stat strong { font-size: 1.2rem; }
-}</style>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+  </style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <div class="nav-brand">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Jesus <strong>Reina</strong></span>
-    </div>
-    <a href="#criar" class="btn-nav">Criar Agora</a>
-  </nav>
+  <!-- Onde o React vai renderizar o App -->
+  <div id="root"></div>
 
-  <section class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-content">
-      <div class="hero-badge">✦ Powered by AI</div>
-      <h1>Crie aplicativos incríveis<br/><span class="gradient-text">sem saber programar</span></h1>
-      <p class="hero-desc">Descreva sua ideia e a inteligência artificial cria seu aplicativo completo com HTML, CSS e JavaScript profissional em segundos.</p>
-      <div class="hero-actions">
-        <a href="#criar" class="btn-primary">⚡ Começar Grátis</a>
-        <a href="#como-funciona" class="btn-outline">Ver como funciona</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat"><strong>10.000+</strong><span>Apps criados</span></div>
-        <div class="stat-sep"></div>
-        <div class="stat"><strong>5 seg</strong><span>Tempo médio</span></div>
-        <div class="stat-sep"></div>
-        <div class="stat"><strong>100%</strong><span>Sem código</span></div>
-      </div>
-    </div>
-  </section>
+  <!-- Nosso código React adaptado para rodar sem Node -->
+  <script type="text/babel">
+    // Extraindo os componentes das bibliotecas globais carregadas no head
+    const { useState } = React;
+    const { BrowserRouter, HashRouter, Routes, Route, Navigate, Outlet, Link, useParams } = ReactRouterDOM;
+    const { QueryClient, QueryClientProvider } = ReactQuery;
 
-  <section id="como-funciona" class="features">
-    <h2 class="section-title">Como funciona?</h2>
-    <p class="section-sub">Três passos simples para ter seu app pronto</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">💬</div>
-        <h3>1. Descreva</h3>
-        <p>Escreva em português o que você quer. Ex: "Quero uma loja de roupas com carrinho"</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🤖</div>
-        <h3>2. A IA Cria</h3>
-        <p>Nossa IA gera HTML, CSS e JavaScript profissional com design moderno automaticamente</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🚀</div>
-        <h3>3. Publique</h3>
-        <p>Edite, exporte o código e publique em qualquer plataforma de hospedagem</p>
-      </div>
-    </div>
-  </section>
+    const queryClientInstance = new QueryClient();
 
-  <section class="types">
-    <h2 class="section-title">O que você pode criar?</h2>
-    <div class="types-grid">
-      <div class="type-pill">🛒 E-commerce</div>
-      <div class="type-pill">📊 Dashboard</div>
-      <div class="type-pill">📝 Blog</div>
-      <div class="type-pill">🎯 Landing Page</div>
-      <div class="type-pill">🏥 Clínica</div>
-      <div class="type-pill">🍕 Restaurante</div>
-      <div class="type-pill">💼 Portfólio</div>
-      <div class="type-pill">📚 Escola</div>
-      <div class="type-pill">🏋️ Academia</div>
-      <div class="type-pill">🎵 Música</div>
-    </div>
-  </section>
+    // --- CONTEXTO DE AUTENTICAÇÃO SIMULADO ---
+    function AuthProvider({ children }) {
+      const [user, setUser] = useState({ name: "Usuário Teste" });
+      return (
+        <div value={{ user }}>
+          {children}
+        </div>
+      );
+    }
 
-  <section id="criar" class="cta">
-    <div class="cta-card">
-      <h2>Pronto para criar seu app?</h2>
-      <p>Comece agora e crie seu primeiro aplicativo em menos de 1 minuto</p>
-      <a href="/" class="btn-primary btn-lg">⚡ Criar Meu App Agora</a>
-    </div>
-  </section>
+    // --- COMPONENTES DE LAYOUT ---
+    function Sidebar({ collapsed, onToggle }) {
+      return (
+        <aside className={`fixed top-0 left-0 h-full bg-slate-900 border-r border-slate-800 transition-all duration-300 p-4 ${collapsed ? 'w-16' : 'w-56'}`}>
+          <button onClick={onToggle} className="w-full bg-slate-800 hover:bg-slate-700 text-white py-1 px-2 rounded mb-6 text-xs">
+            {collapsed ? '➔' : '✕ Recolher'}
+          </button>
+          <nav className="flex flex-col gap-3">
+            <Link to="/" className="text-slate-300 hover:text-white flex gap-2">🏠 {!collapsed && 'Início'}</Link>
+            <Link to="/projects" className="text-slate-300 hover:text-white flex gap-2">📂 {!collapsed && 'Projetos'}</Link>
+            <Link to="/platform-code" className="text-slate-300 hover:text-white flex gap-2">💻 {!collapsed && 'Código'}</Link>
+            <Link to="/settings" className="text-slate-300 hover:text-white flex gap-2">⚙️ {!collapsed && 'Configurações'}</Link>
+          </nav>
+        </aside>
+      );
+    }
 
-  <footer class="footer">
-    <p>© 2025 Jesus Reina • Criador de Apps com IA</p>
-  </footer>
+    function AppLayout() {
+      const [collapsed, setCollapsed] = useState(false);
+      return (
+        <div className="min-h-screen">
+          <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
+          <main className={`transition-all duration-300 p-8 ${collapsed ? 'ml-16' : 'ml-56'}`}>
+            <Outlet />
+          </main>
+        </div>
+      );
+    }
 
-  <script src="app.js"></script>
+    // --- PÁGINAS ---
+    function Home() {
+      return (
+        <div>
+          <h1 className="text-3xl font-bold mb-4">Gerador de Apps com IA 🚀</h1>
+          <p className="text-slate-400 mb-6">Digite seu prompt abaixo para começar a criar seu aplicativo.</p>
+          <textarea className="w-full h-32 bg-slate-800 border border-slate-700 rounded p-3 text-white focus:outline-none focus:border-indigo-500" placeholder="Ex: Crie um app de lista de tarefas com tema escuro..."></textarea>
+          <button className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded transition">Criar App</button>
+        </div>
+      );
+    }
 
-  <script>// Jesus Reina — App JS
-document.addEventListener('DOMContentLoaded', () => {
-  // Fade in on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
+    function Projects() {
+      return (
+        <div>
+          <h1 className="text-2xl font-bold mb-4">Seus Projetos</h1>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-slate-900 border border-slate-800 p-4 rounded hover:border-slate-700">
+              <h3 className="font-semibold text-lg">Projeto Exemplo #1</h3>
+              <p className="text-xs text-slate-500 mt-1">Criado recentemente</p>
+              <Link to="/editor/1" className="inline-block mt-4 text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded">Abrir no Editor</Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
-  document.querySelectorAll('.feature-card, .type-pill, .cta-card').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-  });
+    function Editor() {
+      const { id } = useParams();
+      return (
+        <div className="p-6 h-screen flex flex-col">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-xl font-bold">🛠️ Editor GenForge — Projeto ID: {id}</h1>
+            <Link to="/projects" className="text-sm text-slate-400 hover:text-white">◀ Voltar aos Projetos</Link>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
+            <div className="bg-slate-900 border border-slate-800 rounded p-4 lg:col-span-2">
+              <span className="text-xs font-mono text-indigo-400">PreviewPanel.jsx & CodeEditor.jsx</span>
+              <div className="mt-2 bg-slate-950 h-64 rounded border border-slate-800 p-4 font-mono text-sm text-emerald-400">
+                &lt;div&gt; Seu app gerado aparece aqui &lt;/div&gt;
+              </div>
+            </div>
+            <div className="bg-slate-900 border border-slate-800 rounded p-4 flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-mono text-indigo-400">ChatPanel.jsx (Assistente IA)</span>
+                <p className="text-sm text-slate-400 mt-2">Peça alterações no código para o Gemini.</p>
+              </div>
+              <input type="text" className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm mt-4" placeholder="Pedir alteração..."/>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
-    });
-  });
-});</script>
+    function Settings() {
+      return (
+        <div>
+          <h1 className="text-2xl font-bold mb-4">Configurações da Plataforma</h1>
+          <div className="bg-slate-900 border border-slate-800 p-6 rounded-lg max-w-xl">
+            <label className="block text-sm font-medium text-slate-300 mb-2">Chave de API do Gemini</label>
+            <input type="password" className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white mb-4" placeholder="AIzaSy..." />
+            <button className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm py-2 px-4 rounded font-medium">Salvar Chave</button>
+          </div>
+        </div>
+      );
+    }
+
+    function PlatformCode() { return <div><h1 className="text-2xl font-bold">Código da Plataforma</h1></div>; }
+    function Login() { return <div className="p-8 text-center"><h2>Página de Login</h2><Link to="/" className="text-indigo-400">Entrar fictício</Link></div>; }
+    function PageNotFound() { return <div className="p-8 text-center"><h2>404 - Página Não Encontrada</h2></div>; }
+
+    // --- APP PRINCIPAL COM AS ROTAS ---
+    function App() {
+      return (
+        <QueryClientProvider client={queryClientInstance}>
+          <AuthProvider>
+            {/* Usamos HashRouter em vez de BrowserRouter para funcionar em qualquer servidor web sem precisar de .htaccess */}
+            <HashRouter>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route element={<AppLayout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/projects" element={<Projects />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/platform-code" element={<PlatformCode />} />
+                </Route>
+                <Route path="/editor/:id" element={<Editor />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </HashRouter>
+          </AuthProvider>
+        </QueryClientProvider>
+      );
+    }
+
+    // Renderizando na tela
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
 </body>
 </html>
