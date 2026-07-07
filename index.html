@@ -177,6 +177,5 @@ async function callAPI(promptText){
   const model=document.getElementById("model-select").value;
   const isGemini=provider==="gemini";
   const url=isGemini?`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`:"https://api.groq.com/openai/v1/chat/completions";
-  const userMsg=`INSTRUÇÕES CRÍTICAS: RESPONDA APENAS COM HTML COMPLETO. COMEÇAR COM <!DOCTYPE html>. CSS em <style>. JS em 
 </body>
 </html>
