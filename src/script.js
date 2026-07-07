@@ -160,4 +160,14 @@ function cleanCode(raw){
   let code=raw.replace(/<think>[\s\S]*?<\/think>/gi,"").replace(/```html\s*/gi,"").replace(/```javascript\s*/gi,"").replace(/```css\s*/gi,"").replace(/```\s*/g,"").replace(/^[\s\S]*?(?=<!DOCTYPE html>|<html)/i,"").trim();
   if(!code.toLowerCase().startsWith("<!doctype")){const idx=code.toLowerCase().indexOf("<html");if(idx>0)code=code.substring(idx);code="<!DOCTYPE html>\n"+code;}
   if(!code.toLowerCase().includes("<html")){code=`<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<style>body{font-family:Arial,sans-serif;padding:20px}</style>\n</head>\n<body>\n${code}\n</body>\n</html>`;}
-  if(isCodeCut(code)){const so=(code.match(/<script/gi)||[]).length,sc=(code.match(/<\/script>/gi)||[]).length;let fix=code;for(let i=0;i<so-sc;i++)fix+="\n}catch(e){}\n
+if(isCodeCut(code)){
+      const so=(code.match(/<script/gi)||[]).length;
+      const sc=(code.match(/<\/script>/gi)||[]).length;
+      let fix=code;
+      for(let i=0;i<so-sc;i++) {
+          fix += "\n</script>";
+      }
+      if(!fix.toLowerCase().includes("</body>")) fix += "\n</body>";
+      if(!fix.toLowerCase().endsWith("</html>")) fix += "\n</html>";
+      return fix;
+  }
